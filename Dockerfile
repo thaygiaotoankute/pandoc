@@ -8,16 +8,10 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-# Copy requirements and install
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Create pandoc config directory
-RUN mkdir -p /root/.pandoc/defaults
-
-# Copy application files
 COPY . .
-COPY docx-equation-fix.yaml /root/.pandoc/defaults/
 
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
