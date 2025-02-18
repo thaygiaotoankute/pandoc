@@ -50,9 +50,7 @@ def convert():
             '--to=docx',
             '--standalone',
             '--wrap=none',
-            '--mathml',
-            '--resource-path=.',
-            '--defaults=docx-equation-fix.yaml'
+            '--mathml'
         ]
         
         subprocess.check_call(cmd)
