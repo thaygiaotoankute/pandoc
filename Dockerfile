@@ -1,7 +1,16 @@
-FROM python:3.9-alpine
+# Giai đoạn 1: Cài đặt pandoc
+FROM debian:bullseye-slim AS pandoc
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends pandoc && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Cài đặt pandoc từ nguồn cài đặt có sẵn thay vì qua apt-get
-RUN apk add --no-cache pandoc
+# Giai đoạn 2: Xây dựng ứng dụng Python
+FROM python:3.9-slim
+
+# Sao chép pandoc từ giai đoạn 1
+COPY --from=pandoc /usr/bin/pandoc /usr/bin/
+COPY --from=pandoc /usr/share/pandoc /usr/share/pandoc
 
 WORKDIR /app
 
