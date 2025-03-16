@@ -1,16 +1,12 @@
-# Giai đoạn 1: Cài đặt pandoc
-FROM debian:bullseye-slim AS pandoc
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends pandoc && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+FROM pandoc/latex:latest AS pandoc-base
 
-# Giai đoạn 2: Xây dựng ứng dụng Python
+# Giai đoạn thứ hai: Xây dựng ứng dụng Flask
 FROM python:3.9-slim
 
-# Sao chép pandoc từ giai đoạn 1
-COPY --from=pandoc /usr/bin/pandoc /usr/bin/
-COPY --from=pandoc /usr/share/pandoc /usr/share/pandoc
+# Sao chép pandoc từ image pandoc/latex
+COPY --from=pandoc-base /usr/local/bin/pandoc /usr/local/bin/
+COPY --from=pandoc-base /usr/local/bin/pandoc-crossref /usr/local/bin/
+COPY --from=pandoc-base /usr/local/share/pandoc /usr/local/share/pandoc
 
 WORKDIR /app
 
